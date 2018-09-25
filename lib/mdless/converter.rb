@@ -403,11 +403,11 @@ module CLIMarkdown
 
       input.gsub!(/(?i-m)([`~]{3,})([\s\S]*?)\n([\s\S]*?)\1/ ) do |cb|
         m = Regexp.last_match
-        leader = m[2] ? m[2].upcase + ":" : 'CODE:'
+        leader = !m[2].empty? ? m[2].upcase + ":" : 'CODE:'
         leader += xc
 
         if exec_available('pygmentize')
-          lexer = m[2].nil? ? '-g' : "-l #{m[2]}"
+          lexer = m[2].empty? ? '-g' : "-l #{m[2]}"
           begin
             hilite, s = Open3.capture2(%Q{pygmentize #{lexer} 2> /dev/null}, :stdin_data=>m[3])
 
